@@ -6,6 +6,7 @@ import com.monthlystairbills.model.Recipient;
 import com.monthlystairbills.util.CatalanNumberWords;
 
 import java.io.*;
+import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -68,7 +69,7 @@ public class PropertiesLoader {
             int floor      = Integer.parseInt(require(prefix + "floor"));
             String email   = require(prefix + "email");
             String concept = require(prefix + "concept").replace("{month}", monthName);
-            int quantity   = Integer.parseInt(require(prefix + "quantity.in.euros"));
+            BigDecimal quantity = new BigDecimal(require(prefix + "quantity.in.euros").replace(',', '.'));
 
             result.add(new Recipient(name.trim(), floor, email.trim(), concept.trim(), quantity));
             index++;
