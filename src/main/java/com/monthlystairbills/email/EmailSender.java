@@ -61,7 +61,7 @@ public class EmailSender {
                 .replace("{number}",    String.valueOf(billNumber))
                 .replace("{year}",      String.valueOf(config.getYear()))
                 .replace("{concept}",   recipient.getConcept())
-                .replace("{amount}",    String.valueOf(recipient.getQuantityInEuros()))
+                .replace("{amount}",    recipient.getQuantityInEuros().stripTrailingZeros().toPlainString().replace('.', ','))
                 .replace("{community}", config.getCommunityName());
     }
 

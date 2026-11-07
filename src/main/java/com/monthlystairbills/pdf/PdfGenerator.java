@@ -88,7 +88,7 @@ public class PdfGenerator {
                     .setWidth(UnitValue.createPercentValue(100))
                     .setMarginTop(4f);
 
-            footer.addCell(cell(String.format("Euros     %d \u20AC", recipient.getQuantityInEuros()),
+            footer.addCell(cell(String.format("Euros     %s \u20AC", CatalanNumberWords.formatAmount(recipient.getQuantityInEuros())),
                     FONT_NORMAL, TextAlignment.LEFT)
                     .setBorder(new SolidBorder(0.5f))
                     .setPadding(3f));

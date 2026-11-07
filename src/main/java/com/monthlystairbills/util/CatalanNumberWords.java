@@ -1,5 +1,8 @@
 package com.monthlystairbills.util;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 /**
  * Converts integer euro amounts to their Catalan word representation.
  * e.g. 60 -> "SEIXANTA EUROS"
@@ -21,6 +24,22 @@ public class CatalanNumberWords {
         "", "CENT", "DOS-CENTS", "TRES-CENTS", "QUATRE-CENTS", "CINC-CENTS",
         "SIS-CENTS", "SET-CENTS", "VUIT-CENTS", "NOU-CENTS"
     };
+
+    /** Formats an amount with comma decimals, e.g. 157.29 -> "157,29", 60 -> "60". */
+    public static String formatAmount(BigDecimal amount) {
+        return amount.stripTrailingZeros().toPlainString().replace('.', ',');
+    }
+
+    /** e.g. 157.29 -> "CENT CINQUANTA I SET EUROS AMB VINT-I-NOU CÈNTIMS" */
+    public static String toWords(BigDecimal amount) {
+        BigDecimal scaled = amount.setScale(2, RoundingMode.HALF_UP);
+        int euros = scaled.intValue();
+        int cents = scaled.subtract(new BigDecimal(euros)).movePointRight(2).intValue();
+        if (cents == 0) return toWords(euros);
+        String centsWords = toWordsInternal(cents).trim() + (cents == 1 ? " CÈNTIM" : " CÈNTIMS");
+        if (euros == 0) return centsWords;
+        return toWords(euros) + " AMB " + centsWords;
+    }
 
     public static String toWords(int amount) {
         if (amount <= 0) throw new IllegalArgumentException("L'import ha de ser positiu");
